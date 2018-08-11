@@ -36,3 +36,17 @@ describe("TEST: move should not be a global variable.", function() {
         expect(move).to.not.exist;
     });
 });
+
+var containsString = function(string, substring) {
+    if (string.search(substring) > -1) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+describe("TEST: move should not use 'this'.", function() {
+    it("move does not use 'this': ", function() {
+        expect(containsString(carlike.toString(), 'this')).to.be.false;
+    });
+});
