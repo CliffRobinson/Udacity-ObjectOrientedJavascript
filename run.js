@@ -1,6 +1,7 @@
 const {carlike, move} = require('./library')
 
 let mike = carlike({}, 17)
+console.log(mike);
 mike.move()
 console.log(mike);
 

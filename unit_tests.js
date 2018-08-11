@@ -15,3 +15,24 @@ describe("TEST: A new carlike object should have a move method.", function() {
       ben.loc.should.be.equal(10);
     });
   });
+
+  /*
+This try catch block is just here because Karma has limitations.
+Seriously, if you run
+expect(someVar).to.not.exist
+and someVar doesn't exist, it spits out a referenceError
+instead of passing the test, which is checking to make sure
+it doesn't exist.
+*/
+
+try {
+    move.toString();
+} catch (err) {
+    var move = undefined;
+}
+
+describe("TEST: move should not be a global variable.", function() {
+    it("move is not in the global scope: ", function() {
+        expect(move).to.not.exist;
+    });
+});
