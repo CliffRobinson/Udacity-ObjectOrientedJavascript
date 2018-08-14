@@ -8,4 +8,4 @@ var carlike = function(obj, loc) {
 
 module.exports = {
     carlike
-}
+};
