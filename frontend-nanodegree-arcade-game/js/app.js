@@ -1,3 +1,11 @@
+const leftBound = 0;
+const rightBound = 400;
+const topBound = -18;
+const bottomBound = 400;
+const bugwidth = 100;
+
+
+
 // Enemies our player must avoid
 var Enemy = function(y) {
     // Variables applied to each of our instances go here,
@@ -6,7 +14,7 @@ var Enemy = function(y) {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = "images/enemy-bug.png";
-    this.x = 1;
+    this.x = -90;
     this.y = y;
 };
 
@@ -16,8 +24,16 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x = this.x+(50*dt);
+    this.move(dt);
 };
+
+Enemy.prototype.move = function(dt) {
+    const dx = 50;
+    this.x = this.x+(dx*dt);
+    if(this.x >= rightBound+bugwidth) {
+        this.x = -bugwidth;
+    }
+}
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
@@ -30,33 +46,56 @@ Enemy.prototype.render = function() {
 
 var Player = function() {
     this.sprite = "images/char-boy.png";
-    this.x = 171;
-    this.y = 101;
+    this.x = 200;
+    this.y = bottomBound;
 };
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 Player.prototype.update = function(dt) {
-
-};
-Player.prototype.handleInput = function(input){
-    const dx = 83;
-    const dy = 101;
-    switch (input){
-    case "left":
-        this.x = this.x-dx;
-        break;
-    case "right":
-        this.x = this.x+dx;
-        break;
-    case "up":
-        this.y = this.y-dy;
-        break;
-    case "down":
-        this.y = this.y+dy;
-        break;
+    for (enemy of allEnemies) {
+        this.checkCollison(enemy);
     }
 };
+Player.prototype.move = function(axis, dimension, movesize, lower, upper) {
+    const newPosition = this[axis] + (dimension * movesize);
+    if (newPosition < lower || newPosition > upper) {
+        //Ideally put some effect in here to show wrong movement.
+        //console.log("don't move offscreen");
+    } else {
+        this[axis] = newPosition;
+    }
+    //console.log(`Player position is X: ${this.x} Y: ${this.y}`);
+}
+Player.prototype.handleInput = function(input){
+    const dx = 100;
+    const dy = 83;
+    switch (input){
+    case "left":
+        this.move("x", -1, dx, leftBound, rightBound);
+        break;
+    case "right":
+        this.move("x", 1, dx, leftBound, rightBound);
+        break;
+    case "up":
+        this.move("y", -1, dy, topBound, bottomBound);
+        break;
+    case "down":
+        this.move("y", 1, dy, topBound, bottomBound);
+        break;
+    }
+    
+};
+Player.prototype.checkCollison = function(enemy) {
+    const ydiff = 50;
+    const xdiff = 80;
+    if (Math.abs(this.x - enemy.x) < xdiff && Math.abs(this.y - enemy.y) < ydiff) {
+        this.collision();
+    }
+}
+Player.prototype.collision = function() {
+    console.log("BOOOOM!");
+}
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
