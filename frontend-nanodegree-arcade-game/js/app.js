@@ -4,13 +4,17 @@ const topBound = -18;
 const bottomBound = 400;
 const bugwidth = 100;
 const initialPlayerX = 200;
+const winBound = topBound + 100;
 
 let allEnemies = [];
 let levelNum = 0;
+let levelWon = false;
 
 const enemyDist = [
     [50],
-]
+    [50, 100],
+    [50, 100, 150]
+];
 
 // Enemies our player must avoid
 var Enemy = function(y) {
@@ -70,6 +74,7 @@ Player.prototype.update = function(dt) {
     for (enemy of allEnemies) {
         this.checkCollison(enemy);
     }
+    this.checkWin();
 };
 Player.prototype.move = function(axis, dimension, movesize, lower, upper) {
     const newPosition = this[axis] + (dimension * movesize);
@@ -79,7 +84,7 @@ Player.prototype.move = function(axis, dimension, movesize, lower, upper) {
     } else {
         this[axis] = newPosition;
     }
-    //console.log(`Player position is X: ${this.x} Y: ${this.y}`);
+    console.log(`Player position is X: ${this.x} Y: ${this.y}`);
 }
 Player.prototype.handleInput = function(input){
     const dx = 100;
@@ -110,6 +115,20 @@ Player.prototype.checkCollison = function(enemy) {
 Player.prototype.collision = function() {
     alert('You lose!'); 
     resetLevel();
+}
+
+Player.prototype.checkWin = function () {
+    if (this.y <= 0 ) {
+        levelWon = true;
+        alert(`You win level ${levelNum++ +1}`);
+        
+        if (levelNum == 3) {
+            alert(`You win the motherfucking game, biyaaatch!`)
+        } else {
+            resetLevel();
+            levelWon = false;
+        }
+    }    
 }
 
 function resetLevel() {
