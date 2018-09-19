@@ -123,7 +123,7 @@ Player.prototype.checkWin = function () {
         alert(`You win level ${levelNum++ +1}`);
         
         if (levelNum == 3) {
-            alert(`You win the motherfucking game, biyaaatch!`)
+            alert(`You win the game!`)
         } else {
             resetLevel();
             levelWon = false;
